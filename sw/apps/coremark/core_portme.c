@@ -105,6 +105,7 @@ void portable_init(core_portable *p, int *argc, char *argv[])
 		ee_printf("ERROR! Please define ee_u32 to a 32b unsigned type!\n");
 	}
 	p->portable_id=1;
+        ee_printf("Initialized Coremark for Digilent Atlys\n");
 }
 /* Function : portable_fini
 	Target specific final code 
@@ -112,4 +113,5 @@ void portable_init(core_portable *p, int *argc, char *argv[])
 void portable_fini(core_portable *p)
 {
 	p->portable_id=0;
+        ee_printf("Finished Coremark for Digilent Atlys\n");
 }
