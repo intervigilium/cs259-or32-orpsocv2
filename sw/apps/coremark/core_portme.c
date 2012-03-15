@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include "coremark.h"
 
+#include "board.h"
+#include "cpu-utils.h"
+#include "uart.h"
+
 #if VALIDATION_RUN
 	volatile ee_s32 seed1_volatile=0x3415;
 	volatile ee_s32 seed2_volatile=0x3415;
@@ -98,6 +102,7 @@ ee_u32 default_num_contexts=1;
 */
 void portable_init(core_portable *p, int *argc, char *argv[])
 {
+        uart_init(DEFAULT_UART);
 	if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
 		ee_printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
 	}
@@ -113,5 +118,3 @@ void portable_fini(core_portable *p)
 {
 	p->portable_id=0;
 }
-
-
