@@ -92,6 +92,22 @@ secs_ret time_in_secs(CORE_TICKS ticks) {
 
 ee_u32 default_num_contexts=1;
 
+/* Function : portable_malloc
+        Portable malloc() function.
+ */
+void * portable_malloc(ee_size_t size)
+{
+        return malloc(size);
+}
+
+/* Function : portable_free
+        Portable free() function.
+ */
+void portable_free(void *p)
+{
+        free(p);
+}
+
 /* Function : portable_init
 	Target specific initialization code 
 	Test for some common mistakes.
