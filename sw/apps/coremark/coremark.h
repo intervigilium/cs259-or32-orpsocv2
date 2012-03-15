@@ -44,6 +44,9 @@ El Dorado Hills, CA, 95762
 #define ee_printf printf
 #endif
 
+#define ITERATIONS 10
+#define FLAGS_STR "-mnewlib -mboard=atlys"
+
 /* Actual benchmark execution in iterate */
 void *iterate(void *pres);
 
@@ -171,4 +174,3 @@ ee_u16 core_bench_state(ee_u32 blksize, ee_u8 *memblock,
 /* matrix benchmark functions */
 ee_u32 core_init_matrix(ee_u32 blksize, void *memblk, ee_s32 seed, mat_params *p);
 ee_u16 core_bench_matrix(mat_params *p, ee_s16 seed, ee_u16 crc);
-
