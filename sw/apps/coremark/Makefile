@@ -18,7 +18,7 @@ SW_ROOT=../..
 include $(SW_ROOT)/Makefile.inc
 
 ITERATIONS ?= 10
-FLAGS_STR ?= -nostdlib
+FLAGS_STR ?= \"-nostdlib\"
 
 OR32_CFLAGS+= -DITERATIONS=$(ITERATIONS) -DFLAGS_STR=$(FLAGS_STR)
 
