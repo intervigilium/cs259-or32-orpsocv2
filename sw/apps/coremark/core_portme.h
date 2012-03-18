@@ -23,20 +23,20 @@
 	and implementation of functions thereof.
 */
 #ifndef HAS_TIME_H
-#define HAS_TIME_H 1
+#define HAS_TIME_H 0
 #endif
 /* Configuration : USE_CLOCK
 	Define to 1 if platform has the time.h header file,
 	and implementation of functions thereof.
 */
 #ifndef USE_CLOCK
-#define USE_CLOCK 1
+#define USE_CLOCK 0
 #endif
 /* Configuration : HAS_STDIO
 	Define to 1 if the platform has stdio.h.
 */
 #ifndef HAS_STDIO
-#define HAS_STDIO 1
+#define HAS_STDIO 0
 #endif
 /* Configuration : HAS_PRINTF
 	Define to 1 if the platform has stdio.h and implements the printf function.
@@ -45,11 +45,6 @@
 #define HAS_PRINTF 1
 #endif
 
-/* Configuration : CORE_TICKS
-	Define type of return from the timing functions.
- */
-#include <time.h>
-typedef clock_t CORE_TICKS;
 
 /* Definitions : COMPILER_VERSION, COMPILER_FLAGS, MEM_LOCATION
 	Initialize these strings per platform
@@ -81,11 +76,21 @@ typedef double ee_f32;
 typedef unsigned char ee_u8;
 typedef unsigned int ee_u32;
 typedef ee_u32 ee_ptr_int;
-typedef size_t ee_size_t;
+typedef ee_u32 ee_size_t;
 /* align_mem :
 	This macro is used to align an offset to point to a 32b value. It is used in the Matrix algorithm to initialize the input memory blocks.
 */
 #define align_mem(x) (void *)(4 + (((ee_ptr_int)(x) - 1) & ~3))
+
+/* Configuration : CORE_TICKS
+	Define type of return from the timing functions.
+ */
+#ifdef HAS_TIME_H
+#include <time.h>
+typedef clock_t CORE_TICKS;
+#else
+typedef ee_u32 CORE_TICKS;
+#endif
 
 /* Configuration : SEED_METHOD
 	Defines method to get seed values that cannot be computed at compile time.
@@ -108,7 +113,7 @@ typedef size_t ee_size_t;
 	MEM_STACK - to allocate the data block on the stack (NYI).
 */
 #ifndef MEM_METHOD
-#define MEM_METHOD MEM_MALLOC
+#define MEM_METHOD MEM_STACK
 #endif
 
 /* Configuration : MULTITHREAD
@@ -144,7 +149,7 @@ typedef size_t ee_size_t;
 	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
 */
 #ifndef MAIN_HAS_NOARGC 
-#define MAIN_HAS_NOARGC 0
+#define MAIN_HAS_NOARGC 1
 #endif
 
 /* Configuration : MAIN_HAS_NORETURN

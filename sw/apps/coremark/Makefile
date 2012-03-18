@@ -1,20 +1,31 @@
-# Makefile
+# Coremark makefile for OpenRISC on Digilent Atlys
 
-CC=or32-elf-gcc
-CFLAGS=-Wall -mnewlib -mboard=atlys
-SOURCES=core_list_join.c core_matrix.c core_portme.c core_state.c core_util.c
-LIBS=
-OBJECTS=${SOURCES:.c=.o}
-EXECUTABLE=coremark
+coremark_SOURCES= core_list_join.c \
+                  core_matrix.c \
+                  core_portme.c \
+                  core_state.c \
+                  core_util.c
 
-all: ${SOURCES} ${EXECUTABLE}
+ELF_DEPENDS= $(coremark_SOURCES)
 
-${EXECUTABLE}: ${OBJECTS}
-	${CC} ${CFLAGS} ${LIBS} core_main.c ${OBJECTS} -o $@
+# Build using: make core_main.bin
+SRC_MAIN= core_main.c
 
-.c.o:
-	${CC} ${CFLAGS} ${LIBS} -c $< -o $@
+# Set root
+SW_ROOT=../..
 
+# Include main makefile
+include $(SW_ROOT)/Makefile.inc
+
+ITERATIONS ?= 10
+
+OR32_CFLAGS+= -DITERATIONS=$(ITERATIONS)
+
+%.dis: %.elf
+	$(Q)$(OR32_OBJDUMP) -d $< > $@
+
+%.bin: %.elf
+	$(Q)$(OR32_OBJCOPY) -O binary $< $@
 
 clean:
-	rm *.o ${EXECUTABLE}
+	$(Q)rm -f *.elf *.bin *.vmem *.flashin *.dis

@@ -5,8 +5,12 @@
 	Author : Shay Gal-On, EEMBC
 	Legal : TODO!
 */ 
-#include <stdio.h>
-#include <stdlib.h>
+
+/* orpsoc driver includes */
+#include "cpu-utils.h"
+#include "board.h"
+#include "uart.h"
+
 #include "coremark.h"
 
 #if VALIDATION_RUN
@@ -31,22 +35,11 @@
 	e.g. Read value from on board RTC, read value from cpu clock cycles performance counter etc. 
 	Sample implementation for standard time.h and windows.h definitions included.
 */
-/* Define : TIMER_RES_DIVIDER
-	Divider to trade off timer resolution and total time that can be measured.
-
-	Use lower values to increase resolution, but make sure that overflow does not occur.
-	If there are issues with the return value overflowing, increase this value.
-	*/
-#define NSECS_PER_SEC CLOCKS_PER_SEC
-#define CORETIMETYPE clock_t 
-#define GETMYTIME(_t) (*_t=clock())
 #define MYTIMEDIFF(fin,ini) ((fin)-(ini))
-#define TIMER_RES_DIVIDER 1
-#define SAMPLE_TIME_IMPLEMENTATION 1
-#define EE_TICKS_PER_SEC (NSECS_PER_SEC / TIMER_RES_DIVIDER)
+#define EE_TICKS_PER_SEC TICKS_PER_SEC
 
 /** Define Host specific (POSIX), or target specific global time variables. */
-static CORETIMETYPE start_time_val, stop_time_val;
+static CORE_TICKS start_time_val, stop_time_val;
 
 /* Function : start_time
 	This function will be called right before starting the timed portion of the benchmark.
@@ -55,7 +48,9 @@ static CORETIMETYPE start_time_val, stop_time_val;
 	or zeroing some system parameters - e.g. setting the cpu clocks cycles to 0.
 */
 void start_time(void) {
-	GETMYTIME(&start_time_val );      
+  cpu_reset_timer_ticks();
+  cpu_enable_timer();
+  start_time_val = cpu_get_timer_ticks();
 }
 /* Function : stop_time
 	This function will be called right after ending the timed portion of the benchmark.
@@ -64,7 +59,7 @@ void start_time(void) {
 	or other system parameters - e.g. reading the current value of cpu cycles counter.
 */
 void stop_time(void) {
-	GETMYTIME(&stop_time_val );      
+  stop_time_val = cpu_get_timer_ticks();
 }
 /* Function : get_time
 	Return an abstract "ticks" number that signifies time on the system.
@@ -72,8 +67,6 @@ void stop_time(void) {
 	Actual value returned may be cpu cycles, milliseconds or any other value,
 	as long as it can be converted to seconds by <time_in_secs>.
 	This methodology is taken to accomodate any hardware or simulated platform.
-	The sample implementation returns millisecs by default, 
-	and the resolution is controlled by <TIMER_RES_DIVIDER>
 */
 CORE_TICKS get_time(void) {
 	CORE_TICKS elapsed=(CORE_TICKS)(MYTIMEDIFF(stop_time_val, start_time_val));
@@ -97,7 +90,7 @@ ee_u32 default_num_contexts=1;
  */
 void * portable_malloc(ee_size_t size)
 {
-        return malloc(size);
+  return NULL;
 }
 
 /* Function : portable_free
@@ -105,7 +98,7 @@ void * portable_malloc(ee_size_t size)
  */
 void portable_free(void *p)
 {
-        free(p);
+  return;
 }
 
 /* Function : portable_init
@@ -114,6 +107,7 @@ void portable_free(void *p)
 */
 void portable_init(core_portable *p, int *argc, char *argv[])
 {
+  uart_init(DEFAULT_UART);
 	if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
 		ee_printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
 	}
