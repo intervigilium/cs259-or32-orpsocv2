@@ -42,6 +42,7 @@ El Dorado Hills, CA, 95762
 #include <stdio.h>
 #endif
 #if HAS_PRINTF
+#include "uart.h"
 #include "printf.h"
 #define ee_printf printf
 #endif
