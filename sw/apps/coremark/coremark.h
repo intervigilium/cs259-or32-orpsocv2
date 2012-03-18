@@ -45,9 +45,6 @@ El Dorado Hills, CA, 95762
 #define ee_printf printf
 #endif
 
-#define ITERATIONS 10
-#define FLAGS_STR "-mnewlib -mboard=atlys"
-
 /* Actual benchmark execution in iterate */
 void *iterate(void *pres);
 
