@@ -38,6 +38,9 @@ El Dorado Hills, CA, 95762
 
 #include "core_portme.h"
 
+#if HAS_TIME_H
+#include <time.h>
+#endif
 #if HAS_STDIO
 #include <stdio.h>
 #endif
