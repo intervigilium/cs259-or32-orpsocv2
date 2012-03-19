@@ -42,23 +42,11 @@ El Dorado Hills, CA, 95762
 #include <stdio.h>
 #endif
 #if HAS_PRINTF
-#include "uart.h"
-#include "printf.h"
 #define ee_printf printf
 #endif
 
 /* Actual benchmark execution in iterate */
 void *iterate(void *pres);
-
-/* Typedef: secs_ret
- For machines that have floating point support, get number of seconds as a double.
- Otherwise an unsigned int.
-*/
-#if HAS_FLOAT
-typedef double secs_ret;
-#else
-typedef ee_u32 secs_ret;
-#endif
 
 #if MAIN_HAS_NORETURN
 #define MAIN_RETURN_VAL

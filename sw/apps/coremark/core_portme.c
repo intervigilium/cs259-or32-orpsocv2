@@ -5,12 +5,7 @@
  * Legal : TODO!
  */
 
-/* orpsoc driver includes */
-#include "cpu-utils.h"
-#include "board.h"
-#include "uart.h"
-
-#include "coremark.h"
+#include "core_portme.h"
 
 #if VALIDATION_RUN
 volatile ee_s32 seed1_volatile=0x3415;

@@ -9,6 +9,13 @@
 */
 #ifndef CORE_PORTME_H
 #define CORE_PORTME_H
+
+/* orpsoc driver includes */
+#include "cpu-utils.h"
+#include "board.h"
+#include "uart.h"
+#include "printf.h"
+
 /************************/
 /* Data types and settings */
 /************************/
@@ -42,9 +49,11 @@
  Define to 1 if the platform has stdio.h and implements the printf function.
 */
 #ifndef HAS_PRINTF
-#define HAS_PRINTF 1
+#define HAS_PRINTF 0
 #endif
 
+/* orpsoc provides printf.h header */
+#define ee_printf printf
 
 /* Definitions : COMPILER_VERSION, COMPILER_FLAGS, MEM_LOCATION
  Initialize these strings per platform
@@ -90,6 +99,16 @@ typedef ee_u32 ee_size_t;
 typedef clock_t CORE_TICKS;
 #else
 typedef ee_u32 CORE_TICKS;
+#endif
+
+/* Typedef: secs_ret
+ For machines that have floating point support, get number of seconds as a double.
+ Otherwise an unsigned int.
+*/
+#if HAS_FLOAT
+typedef double secs_ret;
+#else
+typedef ee_u32 secs_ret;
 #endif
 
 /* Configuration : SEED_METHOD
