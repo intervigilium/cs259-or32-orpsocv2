@@ -94,7 +94,12 @@ typedef ee_u32 ee_size_t;
 /* Configuration : CORE_TICKS
  Define type of return from the timing functions.
  */
+#ifdef HAS_TIME_H
+#include <time.h>
+typedef clock_t CORE_TICKS;
+#else
 typedef ee_u32 CORE_TICKS;
+#endif
 
 /* Typedef: secs_ret
  For machines that have floating point support, get number of seconds as a double.
